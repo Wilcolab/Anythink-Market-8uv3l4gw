@@ -4,6 +4,7 @@ Dockerfile
 .dockerignore
 .gitignore
 README.md
-src/server.js
 yarn.lock
+# include source and nodemon so Docker build can copy them
+src
 nodemon.json

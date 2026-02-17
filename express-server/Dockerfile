@@ -3,8 +3,8 @@ FROM node:14
 # Set the working directory
 WORKDIR /usr/src/app
 
-# Copy package.json and yarn.lock
-COPY package.json yarn.lock ./
+# Copy package.json (yarn.lock may be absent)
+COPY package.json ./
 
 # Install dependencies
 RUN yarn install

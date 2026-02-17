@@ -1,9 +1,25 @@
+version: "3.8"
 services:
   python-server:
     build:
       context: ./python-server
       dockerfile: Dockerfile
     ports:
-      - 8000:8000
+      - "8000:8000"
     volumes:
       - ./python-server/src:/app/src
+    environment:
+      - PYTHONUNBUFFERED=1
+
+  node-server:
+    build:
+      context: ./express-server
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./express-server:/usr/src/app
+    depends_on:
+      - python-server
+    environment:
+      - NODE_ENV=development

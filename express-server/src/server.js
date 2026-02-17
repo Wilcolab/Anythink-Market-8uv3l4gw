@@ -1,8 +1,8 @@
-const express = require('express');
+const app = require('./app');
 
-const app = express();
-const PORT = 8001;
+const PORT = process.env.PORT || 8001;
 
 app.listen(PORT, () => {
+    // eslint-disable-next-line no-console
     console.log(`Server is running on http://localhost:${PORT}`);
 });
