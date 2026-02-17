@@ -34,35 +34,88 @@ express-server
 
 2. Install dependencies:
    ```
-   yarn install
+   # Express Server
+
+   Overview
+   -
+   This is a small Express.js HTTP server used as a lightweight example alongside a FastAPI-based Python server in the same repository. It exposes a few simple endpoints to manage an in-memory list of "tasks" and demonstrates basic middleware, input validation and centralized error handling.
+
+   Key features
+   -
+   - Simple JSON API with three endpoints: `GET /`, `GET /tasks`, `POST /tasks`.
+   - Request logging middleware (console) and centralized error handler.
+   - Basic input validation for `POST /tasks` (ensures `text` is a non-empty string).
+   - Dockerfile included for containerized runs.
+
+   Prerequisites
+   -
+   - Node.js (>= 14)
+   - npm (or yarn)
+
+   Install
+   -
+   Clone the repository and install dependencies:
+
+   ```bash
+   git clone https://github.com/Wilcolab/Anythink-Market-8uv3l4gw.git
+   cd Anythink-Market-8uv3l4gw/express-server
+   npm install
    ```
 
-### Running the Server
+   Run (development)
+   -
+   Start the server with automatic reload (nodemon configured in `package.json`):
 
-To start the server with automatic reloading, use the following command:
-
-```
-yarn start
-```
-
-The server will listen on `http://localhost:8001`.
-
-### Docker
-
-To build and run the server using Docker, use the following commands:
-
-1. Build the Docker image:
-   ```
-   docker build -t express-server .
+   ```bash
+   npm start
    ```
 
-2. Run the Docker container:
+   By default the server listens on port `8001` (override with `PORT` environment variable).
+
+   Run with Docker
+   -
+   Build and run the container:
+
+   ```bash
+   docker build -t anythink-express .
+   docker run -p 8001:8001 anythink-express
    ```
-   docker run -p 8001:8001 express-server
+
+   API Endpoints
+   -
+   - `GET /` — returns a simple textual greeting (`Hello World`).
+   - `GET /tasks` — returns the current in-memory array of tasks in JSON: `{ "tasks": [ ... ] }`.
+   - `POST /tasks` — accepts JSON body `{ "text": "task description" }`. On success returns `{ "message": "Task added successfully" }`.
+
+   Validation and error responses
+   -
+   Invalid requests to `POST /tasks` (missing or empty `text`) return `400` with a JSON payload containing `error` and `message`. Unknown routes return `404`. A centralized error handler returns structured JSON errors and includes a `stack` trace when `NODE_ENV` is not `production`.
+
+   For full details about the error format and examples, see `ERROR_HANDLING.md`.
+
+   Project structure
+   -
+   ```
+   express-server/
+   ├─ src/
+   │  └─ server.js          # Express app and route definitions
+   ├─ package.json          # npm scripts and dependencies
+   ├─ Dockerfile            # Container build instructions
+   ├─ nodemon.json          # Dev reload config
+   ├─ ERROR_HANDLING.md     # Notes about error handling & examples
+   └─ README.md             # This file
    ```
 
-The server will be accessible at `http://localhost:8001` from your host machine.
+   Comparison with Python server
+   -
+   This repository also includes a small FastAPI server (`python-server`) which exposes the same API. The FastAPI implementation benefits from Pydantic validation out of the box; the Express server demonstrates how to add manual validation and a centralized error handler to obtain similar behavior.
 
-## License
+   Notes and recommendations
+   -
+   - For production use replace the console logger with a structured logger (`winston`, `pino`) and consider request logging with `morgan`.
+   - Use a validation library (`joi`, `zod`) for more complex schemas.
+   - Persist tasks to a database instead of keeping them in memory.
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+   License
+   -
+   See repository root for licensing details.
