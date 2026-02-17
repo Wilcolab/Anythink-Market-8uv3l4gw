@@ -1,0 +1,9 @@
+node_modules
+yarn-error.log
+Dockerfile
+.dockerignore
+.gitignore
+README.md
+src/server.js
+yarn.lock
+nodemon.json
